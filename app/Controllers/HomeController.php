@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use NeeZiaa\App;
+use NeeZiaa\Controller;
 use NeeZiaa\Utils\Init;
 use App\Models\ExampleModel;
 
-class HomeController
+class HomeController extends Controller
 {
 
     private ExampleModel $model;
@@ -22,7 +24,7 @@ class HomeController
 
     public function index(): array|null|\Twig\Environment
     {
-        return Init::render('index');
+        return  $this->app->render('index');
     }
 
 }

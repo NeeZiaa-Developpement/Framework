@@ -5,13 +5,17 @@ namespace NeeZiaa;
 use NeeZiaa\Database\DatabaseException;
 use NeeZiaa\Database\Mysql\MysqlDatabase;
 use NeeZiaa\Router\Routes;
+use NeeZiaa\Twig\Twig;
 use NeeZiaa\Utils\Config;
 
 class App {
 
     private static ?App $_instance = null;
+
     private ?Config $settings;
-    private ?Routes $route_instance = null;
+    private ?Routes $route = null;
+    private ?Twig $twig = null;
+
     private mixed $db = null;
 
     /**
@@ -33,11 +37,11 @@ class App {
      */
     public function getRoutes(): Routes
     {
-        if(is_null($this->route_instance)){
-            $this->route_instance = new Routes();
-            $this->route_instance->routes();
+        if(is_null($this->route)){
+            $this->route = new Routes();
+            $this->route->routes();
         }
-        return $this->route_instance;
+        return $this->route;
     }
 
     /**
@@ -58,6 +62,22 @@ class App {
         }
         return $this->db;
 
+    }
+
+    /**
+     * @return Config|null
+     */
+    public function getSettings(): ?Config
+    {
+        return $this->settings;
+    }
+
+    public function getTwig(): ?Twig
+    {
+        if(is_null($this->twig)){
+            $this->twig = new Twig();
+        }
+        return $this->twig;
     }
 
 
