@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use NeeZiaa\Database\QueryBuilder;
+use NeeZiaa\Database\Mysql\QueryBuilder;
 
-class HomeModel
+class ExampleModel
 {
 
     public function example(): array

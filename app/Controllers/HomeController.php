@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use NeeZiaa\Utils\Init;
-use NeeZiaa\Router\Router\Utils\Model\ExampleModel;
+use App\Models\ExampleModel;
 
 class HomeController
 {

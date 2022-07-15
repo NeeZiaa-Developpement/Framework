@@ -3,8 +3,8 @@
 require dirname(__DIR__).'/vendor/autoload.php';
 
 use NeeZiaa\Router\Routes;
-use NeeZiaa\App;
-$config = new \NeeZiaa\Utils\Config();
+
+$config = NeeZiaa\Utils\Config::getInstance();
 
 if($config->get('DEBUG'))
 {
@@ -16,10 +16,9 @@ if($config->get('DEBUG'))
     $whoops->register();
 }
 
-$app = (new App($config));
-$app->getRoutes();
-dd('b');
-
 session_start();
+
+$app = (new NeeZiaa\App($config));
+$app->getRoutes();
 
 //! Code non exécuté !

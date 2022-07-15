@@ -1,13 +1,11 @@
 <?php
 namespace NeeZiaa\Utils;
 
-use JetBrains\PhpStorm\NoReturn;
-use NeeZiaa\Database\QueryBuilder;
-use NeeZiaa\Router\Router;
-use NeeZiaa\Router\Routes;
-use NeeZiaa\Utils\Main;
+use NeeZiaa\App;
+use NeeZiaa\Database\Mysql\QueryBuilder;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 
 class Init
 {
@@ -15,15 +13,21 @@ class Init
     public static function Twig(array $functions = [], array $filters = []): Environment
     {
 
+        $config = Config::getInstance();
+
+        $app = App::getInstance();
+
         $functions = [
             ['name'=>'url'],
         ];
 
         $loader = new FilesystemLoader(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Views');
 
-        if (Main::env()['DEBUG']) $options = []; else $options = ['cache' => Main::env()['CACHE_PATH']];
+        if ($config->get('DEBUG')) $options = []; else $options = ['cache' => $config->get('CACHE_PATH')];
 
-        //        foreach ($functions as $fu){
+        $twig = new Environment($loader, $options);
+
+//        foreach ($functions as $fu){
 //            $fu['name'] = '\NeeZiaa\Twig\\'. ucfirst($fu['name']) . 'Extension';
 //            $twig->addFunction(
 //                (new $fu['name']())
@@ -37,12 +41,11 @@ class Init
 //                    ->getFilters()
 //            );
 //        }
-//        require_once dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Routes.php';
-//        $function = new \Twig\TwigFunction('url', function ($route, $params = []){
-//            Routes::$router->url($route, $params);
-//        });
-//        $twig->addFunction($function);
-        return new Environment($loader, $options);
+        $function = new TwigFunction('url', function ($route, $params = []) use ($app) {
+            $app->getRoutes()->url($route, $params);
+        });
+        $twig->addFunction($function);
+        return $twig;
     }
 
     public static function render(string $filename, ?array $array_loader = NULL, ?array $twig = null): Environment|array|null
@@ -51,14 +54,7 @@ class Init
             $twig = Init::Twig();
         }
 
-        $settings = (new QueryBuilder())
-            ->select()
-            ->table('settings')
-            ->fetch();
-
-        $twig_array = [
-            'settings' => array_map('utf8_encode', $settings)
-        ];
+        $twig_array = [];
 
         if (!is_null($array_loader)) {
             $twig_array = array_merge($twig_array, $array_loader);
