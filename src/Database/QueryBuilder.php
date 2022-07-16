@@ -373,11 +373,11 @@ class QueryBuilder
     {
         $query = $this->__toString();
         if(!empty($this->params)){
-            $statement = $this->pdo->prepare($query);
+            $statement = $this->db->prepare($query);
             $statement->execute($this->params);
             return $statement;
         }
-        return $this->pdo->query($query);
+        return $this->db->query($query);
 
 
     }
