@@ -17,7 +17,7 @@ class Twig {
      */
     public static function getInstance(): mixed
     {
-        if(is_null(self::$_instance)){ new Twig(); }
+        if(is_null(self::$_instance)) new Twig();
         return self::$_instance;
     }
 

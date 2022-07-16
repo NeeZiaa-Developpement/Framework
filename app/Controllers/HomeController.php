@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use NeeZiaa\App;
 use NeeZiaa\Controller;
+use NeeZiaa\Form\Form;
 use NeeZiaa\Utils\Init;
 use App\Models\ExampleModel;
 
@@ -14,17 +15,23 @@ class HomeController extends Controller
 
     private array $params;
 
-    public function __construct($params)
+    public function __construct()
     {
-        // URL params
-        $this->params = $params;
 
         $this->model = new ExampleModel();
     }
 
     public function index(): array|null|\Twig\Environment
     {
-        return  $this->app->render('index');
+        (new Form())
+            ->select('Example')
+            ->option('Option 1 ', 1)
+            ->option('Option 2 ', 2)
+
+            ->input('Name')
+            ->submit();
+        return null;
+//        return  $this->app->getTwig()->render('index');
     }
 
 }

@@ -10,7 +10,7 @@ class Controller {
     protected ?App $app = null;
     protected ?Twig $twig = null;
 
-    public function __construct() {
+    public function __construct($params) {
         $this->app = App::getInstance();
         $this->twig = App::getInstance()->getTwig();
     }

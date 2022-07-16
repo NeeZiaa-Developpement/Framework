@@ -3,7 +3,6 @@ namespace NeeZiaa\Database;
 
 use NeeZiaa\App;
 use NeeZiaa\Database\DatabaseException;
-use NeeZiaa\Database\Connection;
 use PDO;
 use phpDocumentor\Reflection\Types\Callable_;
 
@@ -12,7 +11,7 @@ class QueryBuilder
 
     private string $action;
 
-    private array $colums;
+    private string $columns;
 
     private mixed $markers;
 
@@ -67,8 +66,8 @@ class QueryBuilder
     }
 
     /**
-     * Définie les colonnes séléctionnées
-     * @param string $fiels
+     * Définie les colonnes sélectionnées
+     * @param string ...$fiels
      * @return QueryBuilder
      */
 
@@ -81,7 +80,7 @@ class QueryBuilder
 
 
     /**
-     * Définie les colonnes a insérer
+     * Définie les colonnes à insérer
      * @param array $values
      * @return QueryBuilder
      */
@@ -97,7 +96,7 @@ class QueryBuilder
         $columns = trim($columns, ', ');
         $markers = trim($markers, ', ');
         $request = 'INSERT INTO `[TABLE_NAME]` (' . $columns . ') VALUES (' . $markers . ')';
-        $this->colums = $columns;
+        $this->columns = $columns;
         $this->markers = $markers;
         $this->action = "INSERT";
         return $this;
@@ -109,7 +108,7 @@ class QueryBuilder
      * @return QueryBuilder
      */
 
-    public function update($values): self
+    public function update(array $values): self
     {
         $request = '';
         foreach ($values as $key) {
@@ -303,7 +302,7 @@ class QueryBuilder
             
             //dd($this->markers, $this->colums, $this->buildFrom(), $this->params);
 
-            $parts[] = '('.$this->colums.')';
+            $parts[] = '('.$this->columns.')';
             $parts[] = 'VALUES('.$this->markers.')';
 
             return join(' ', $parts);
